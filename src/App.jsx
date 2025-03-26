@@ -1,8 +1,24 @@
 import Batsman from './Batsman';
+import {Suspense} from 'react';
+import Users from './Users';
+import Friends from './Friends';
 import './App.css'
 
 
+
+const fetchUsers = fetch('https://jsonplaceholder.typicode.com/users')
+  .then(res => res.json())
+
+
+const fetchFriends = async() => {
+  const res = await fetch('https://jsonplaceholder.typicode.com/users')
+  return res.json();
+}
+
+
 function App() {
+
+  const friendsPromise = fetchFriends();
 
   function handleClick(){
     alert('I a clicked.')
@@ -20,20 +36,20 @@ function App() {
   return (
     <>
       <h1>Vite + React</h1>
+
+
+      <Suspense fallback={<p>Data are loading...</p>}>
+        <Users fetchUsers = {fetchUsers}></Users>
+      </Suspense>
+
+      <Suspense fallback={<h3>Friends Data is Coming...</h3>}>
+        <Friends friendsPromise = {friendsPromise}></Friends>
+      </Suspense>
+
+
       {/* <button onclick="handleClick()">Click me</button> */}
 
       <Batsman></Batsman>
-
-
-
-
-
-
-
-
-
-
-
       {/* way- 1 */}
       <button onClick={handleClick}>Click me</button>
       <br /><br />
